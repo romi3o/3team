@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운명의 롤모델 찾기 - 질문</title>
+    <style>
+        /* 기본 스타일 설정 */
+    body {
+        font-family: 'Nanum Myeongjo', serif;
+        margin: 0;
+        padding: 20px;
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #ccc;
+    }
+
+    .question-container {
+        margin-top: 20px;
+        text-align: center;
+        font-family: 'Nanum Gothic', sans-serif;
+        font-size: 1em;
+    }
+
+    select, input[type="text"], textarea {
+        width: 100%; /* 가로 길이를 부모 요소에 맞게 조정 */
+        max-width: 400px; /* 최대 너비 설정 */
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        background: black;
+        color: white;
+        font-size: 1em;
+        margin-bottom: 10px; /* 선택지와 버튼 사이의 여백 설정 */
+    }
+
+    button {
+        background-color: black;
+        color: white;
+        padding: 10px 20px; /* 버튼 크기 조절 */
+        border: 1px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        max-width: 200px; /* 최대 너비 설정 */
+        display: block;
+        margin: 20px auto 0; /* 상단 여백 추가, 수평 중앙 정렬 */
+    }
+
+    button:hover {
+        background-color: darkgray;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: block;
+    }
+
+    .action-container {
+        margin-top: 20px;
+        font-family: 'Nanum Gothic', sans-serif;
+        text-align: center;
+    }
+
+    .options-container {
+        margin-bottom: 20px; /* 선택지와 버튼 사이의 여백 설정 */
+    }
+
+    input[type="radio"] + label {
+        display: block; /* 각 label을 블록으로 표시하여 아래에 여백 추가 */
+        margin-bottom: 10px; /* 아래쪽 여백을 추가하여 선택지 사이 간격 확보 */
+    }
+
+    input[type="radio"] {
+        display: none; /* 기본 라디오 버튼 숨기기 */
+    }
+
+    label {
+        display: block; /* label을 블록 요소로 설정 */
+        background-color: black; /* 배경색 설정 */
+        color: white; /* 텍스트 색상 설정 */
+        padding: 15px 30px; /* 버튼 크기 및 패딩 설정 */
+        border: 2px solid white; /* 테두리 설정 */
+        border-radius: 5px; /* 모서리 둥글게 설정 */
+        cursor: pointer; /* 커서 모양을 포인터로 설정 */
+        text-align: center; /* 텍스트 중앙 정렬 */
+        font-size: 16px; /* 폰트 크기 설정 */
+        margin-bottom: 10px; /* 선택지 사이 간격 설정 */
+        box-sizing: border-box; /* 패딩과 테두리가 버튼 크기에 포함되도록 설정 */
+    }
+
+    input[type="radio"]:checked + label {
+        background-color: darkgray; /* 선택된 상태의 배경색 설정 */
+    }
+
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Channeling Your Destiny Scholar</h1>
+        <h2>Q <span id="page-number"></span> / 13</h2>
+    </div>
+    <div id="question-container" class="question-container">
+        <img id="question-image" src="" alt="질문 이미지">
+        <div id="question-text"></div>
+    </div>
+    <div class="container">
+        <div class="action-container" id="action-container">
+            <!-- 선택지와 버튼이 여기에 추가됩니다 -->
+        </div>
+    </div>
+    <script>
+        const questions = [
+            {
+                image: "Sub.svg",
+                question : "",
+                type: "interest",
+                options: ["정치", "경제", "경영", "IT", "사회", "철학", "심리", "역사", "과학", "환경", "예술"]
+            },
+            { question: "나를 더 잘 표현하는 것은?", A: "편견이 없고 심플하다", B: "따뜻하고 몽글몽글하다", valueA: "E", valueB: "I", image: "SSUPIC/SSU1.png" },
+            { question: "나에게 더 흥미로운 교양 선택 강의는?", A: "이미 잘 알고 있거나 관심 있는 주제의 강의", B: "내가 잘 모르지만 알고 싶은 새로운 주제에 대해 배울 수 있는 강의", valueA: "E", valueB: "I", image: "SSUPIC/SSU2.png" },
+            { question: "수강평이 없네.. 이 수업 들어도 되는건가?", A: "흠... OT 들어보고 결정해야지!", B: "강의계획서와 교수님, 시간표를 따져가며 생각해본다.", valueA: "E", valueB: "I", image: "SSUPIC/SSU3.png" },
+            { question: "들으려는 강의가 시험을 보지 않는 대신 발표를 해야한다! 성적은 잘 주신다는데...", A: "발표수업이라고..? 드랍해야지!", B: "발표만 하면 성적 잘 나온다고? 그럼 나쁘지 않네!", valueA: "S", valueB: "N", image: "SSUPIC/SSU4.png" },
+            { question: "오늘은 개강날이다! 교수님 OT만 하고 끝내주세요..", A: "오랜만에 동기들이랑 놀아야 되거든요~!", B: "오랜만에 바깥활동을 하니 2배로 힘들어… 집에 가고싶어요..", valueA: "S", valueB: "N", image: "SSUPIC/SSU5.png" },
+            { question: "학기 초에 중요한 과제가 주어졌을 때 나는", A: "일단 다음주에 자료조사를 시작하고, 마감 일주일 전까지 마무리하자.", B: "이때쯤 시작하면 되겠지? 계획은 그때 세워야지.", valueA: "S", valueB: "N", image: "SSUPIC/SSU6.png" },
+            { question: "조별과제를 하며 의견 충돌이 생겼다! 나에게 갈등이란?", A: "의견을 조율하는 데 꼭 필요한 과정이지!", B: "피할 수 있다면 피하고 원만하게 해결하자!", valueA: "T", valueB: "F", image: "SSUPIC/SSU7.png" },
+            { question: "친구들과 집에서 놀기로 했다! 그런데 준비한 음식이 조금 모자라보인다…", A: "많이 모자라지는 않겠지? 지난번에 음식이 모자랐을 때는 어땠지?", B: "글쎄? 만일 모자라면 더 시켜 먹자.", valueA: "T", valueB: "F", image: "SSUPIC/SSU8.png" },
+            { question: "친구가 나에게 진지한 고민을 털어놓는다. 나는?", A: "내가 알고있던 사실과 경험에 기반하여 대답한다.", B: "나를 대입해서 생각한 후 대답한다.", valueA: "T", valueB: "F", image: "SSUPIC/SSU9.png" },
+            { question: "시험기간이 다가오는데  공부가 손에 안 잡힌다…", A: "하루만에 시험 잘보는 법은 뭘까… 내 학점…", B: "시험은 왜 봐야 되는거지? 나한테 도움이 될까?", valueA: "J", valueB: "P", image: "SSUPIC/SSU10.png" },
+            { question: "여자친구 / 남자친구와 싸웠다…", A: "누구한테 털어놓고 싶어. 친구들이랑 이야기하면 좀 나아질 것 같아.", B: "혼자 시간을 가지면서 차분히 생각해봐야겠어.", valueA: "J", valueB: "P", image: "SSUPIC/SSU11.png" },
+            { question: "나에게 규칙이란?", A: "지켜야 하는 것", B: "나를 억압하는 것", valueA: "J", valueB: "P", image: "SSUPIC/SSU12.png" }
+        ];
+
+        let currentPage = new URLSearchParams(window.location.search).get('page');
+        if (!currentPage) currentPage = 1;
+
+        document.getElementById('page-number').innerText = currentPage;
+
+        const question = questions[currentPage - 1];
+
+        // 이미지와 질문을 업데이트
+        if (question) {
+            document.getElementById('question-image').src = question.image;
+
+            document.getElementById('question-text').innerHTML = `<p>${question.question}</p>`;
+
+            const actionContainer = document.getElementById('action-container');
+            if (question.type === "interest") {
+                actionContainer.innerHTML = `
+                    <div class="options-container">
+                        <select id="interest">
+                            ${question.options.map(option => `<option value="${option}">${option}</option>`).join('')}
+                        </select>
+                    </div>
+                    <button onclick="nextQuestion()">다음</button>
+                `;
+            } else {
+                actionContainer.innerHTML = `
+                    <div class="options-container">
+                        <input type="radio" id="q${currentPage}a" name="question" value="${question.valueA}">
+                        <label for="q${currentPage}a">${question.A}</label><br>
+                        <input type="radio" id="q${currentPage}b" name="question" value="${question.valueB}">
+                        <label for="q${currentPage}b">${question.B}</label>
+                    </div>
+                    <button onclick="nextQuestion()">다음</button>
+                `;
+            }
+        }
+
+        function nextQuestion() {
+            if (question.type === "interest") {
+                const interest = document.getElementById('interest').value;
+                localStorage.setItem('interest', interest);
+            } else {
+                const answer = document.querySelector('input[name="question"]:checked');
+                if (answer) {
+                    const mbtiResult = JSON.parse(localStorage.getItem('mbti_result')) || { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, P: 0, J: 0 };
+                    mbtiResult[answer.value]++;
+                    localStorage.setItem('mbti_result', JSON.stringify(mbtiResult));
+                } else {
+                    alert("답변을 선택하세요.");
+                    return;
+                }
+            }
+
+            if (currentPage < questions.length) {
+                window.location.href = `questions.html?page=${parseInt(currentPage) + 1}`;
+            } else {
+                window.location.href = "result.html";
+            }
+        }
+    </script>
+</body>
+</html>

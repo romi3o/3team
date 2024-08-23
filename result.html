@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운명의 롤모델 찾기 - 결과</title>
+    <!-- 여기부터 css 수정하면 됨 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .page-number {
+            text-align: right;
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <!-- 여기까지 css 수정하면 됨 -->
+</head>
+<body>
+    <h1>운명의 롤모델 찾기</h1>
+
+    <div id="result-container">
+        <!-- 결과 내용이 여기에 삽입 -->
+    </div>
+
+    <script>
+        const name = localStorage.getItem('mbti_name');
+        const interest = localStorage.getItem('interest');
+        const mbtiResult = JSON.parse(localStorage.getItem('mbti_result'));
+
+        const EI = mbtiResult.E > mbtiResult.I ? 'E' : 'I';
+        const SN = mbtiResult.S > mbtiResult.N ? 'S' : 'N';
+        const TF = mbtiResult.T > mbtiResult.F ? 'T' : 'F';
+        const PJ = mbtiResult.P > mbtiResult.J ? 'P' : 'J';
+
+        const mbti = EI + SN + TF + PJ;
+
+        const famousPeople = {
+            'INTJ': { 
+                '정치': { name: '헨리 키신저', img: 'https://i.namu.wiki/i/caHTRnX8Xsj6vsowX2oUfdS1nUQ2v-n9jo19RRESkxxdVb9BEUoPs_NgGkg15VDXBttCSWrvoP3MmjpfdHHkAA.webp' },
+                '경제': { name: '밀턴 프리드먼', img: 'https://i.namu.wiki/i/yZemw1WIJsN4Dlud-L1sJq4UDW1HVefKRmLRPVab69EttyEqSkUlMiVdTLQTy2g9-PGGDwgZfcD5hN7XgO8Yuw.webp' },
+                '경영': { name: '일론 머스크', img: 'https://i.namu.wiki/i/1L_8d7FSBchLDnx7zLaxWs-HvUa6wQzLy2trSu0fGIqjWYQDWjEIEyxxoNJyDaIq_FF1QKFsu8nMNpDbJn_QSQ.webp' },
+                'IT': { name: '일론 머스크', img: 'https://i.namu.wiki/i/1L_8d7FSBchLDnx7zLaxWs-HvUa6wQzLy2trSu0fGIqjWYQDWjEIEyxxoNJyDaIq_FF1QKFsu8nMNpDbJn_QSQ.webp' },
+                '사회': { name: '말라라 유사프자이', img: 'https://i.namu.wiki/i/vfmbu35JS8xRm8fyaApwY1WEbDH5Pfj4qZuvFZmV3KkwGm4X-HGkzeiNkBFztL6nrKxxz4Cn4E-CoylkC4Ya9A.webp' },
+                '철학': { name: '프리드리히 니체', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nietzsche187a.jpg/236px-Nietzsche187a.jpg' },
+                '심리': { name: '윌리엄 제임스', img: 'https://i.namu.wiki/i/A1fOiQVxjqlROh22Bhpf62mrb9FxJ_jDpjCms46pPzA-AlyEy8r5yDsYAGOxTC7Uf0kQLkU5_ypan_lF6eRmRQ.webp' },
+                '역사': { name: '유발 하라리', img: 'https://static.ebs.co.kr/images/public/2022/04/13/14/57/8/5d300626-d4b6-477b-891d-f5b76e1fd4a4.jpg' },
+                '과학': { name: '스티븐 호킹', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Stephen_Hawking.StarChild.jpg/230px-Stephen_Hawking.StarChild.jpg' },
+                '환경': { name: '그레타 툰베리', img: 'https://i.namu.wiki/i/2whGxfERfikl0xHWt_Sj5sJjhoJuivRMMD92-ZpCDVODx3TKiyOoUP2-2To7rUJiK6wawo-Fn0SKHSYtXue3eA.webp' },
+                '예술': { name: '크리스토퍼 놀란', img: 'https://img.gqkorea.co.kr/gq/2023/10/style_652f663d54ca7-928x1400.jpg' }
+            },
+            'INTP': { 
+                '정치': { name: '제임스 매디슨', img: 'https://i.namu.wiki/i/nOdhRH0XiS3HlUeFRlIWMcAsN11n_oOzwfOQb4VSZwBmQpaNC5eew3X8iwz6BFeUjmQZ6HAYWLP5hHf_LPwjjg.webp' },
+                '경제': { name: '존 메이너드 케인스', img: 'https://i.namu.wiki/i/C7r2Qk3zrY_GmM-_xMNgyvhjcuRDEiF_BkULEyK9cEsCha_xBrYHNBJwlP89aE2Bj1aSsr6KivOMQQ-pSVdOlQ.webp' },
+                '경영': { name: '피터 드러커', img: 'https://i.namu.wiki/i/ElnII7dw_GjI8_zwnmk4rbat4_GeimnpmypLGfK9wqcorejsiD_cCJ6SpxrQC0rjujyQtI0uLnhluQRn4JtPNg.webp' },
+                'IT': { name: '레이 커즈와일', img: 'https://i.namu.wiki/i/Xl4lh4e5Jxn6ezTFFKVvYUIUXAg_FttYml3P-c08uqm73389INAUkUJCDDMP1Z1vFw3xb4MtPspZ-xPawFju3g.webp' },
+                '사회': { name: '스티븐 호킹', img: 'https://i.namu.wiki/i/9Kxk1OjgeOkAp7yV4QsLhBoKNrEECI_JhZG8r4qpKahhq6M4W75QVkkSBZ5eDOlk2_NOMycTSmwP6sfGO0buIg.webp' },
+                '철학': { name: '임마누엘 칸트', img: 'https://i.namu.wiki/i/rlbZvC0Xl3Qix7gRPmtNIqxJEHYw_3l_hmkx7DW1h6uH32xvrovfnvBJkvHOudgOYfLmAtXSnNsIdud8BTOaqw.webp' },
+                '심리': { name: '리처드 니스벳', img: 'https://static.ebs.co.kr/imag0es/public/2022/04/13/14/37/31/f947295d-c932-480c-a487-212a697d741b.jpg' },
+                '역사': { name: '헤로도토스', img: 'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcSl3o0-c0AkAbCuq8RZ7u92YxhB2NNBqStNlTyXo1DjuiymJw8eA0Tr6RQbW0pJ8usq' },
+                '과학': { name: '리처드 도킨스 ', img: 'https://static.ebs.co.kr/images/public/2022/04/13/14/33/54/7f22bdf0-f2b6-4f70-9e9f-77cdb68d4e04.jpg' },
+                '환경': { name: '제임스 러브록 ', img: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202207/28/1f8ed345-c1d6-4eff-b08c-b67eac62528a.jpg' },
+                '예술': { name: '안도 다다오 ', img: 'https://static.ebs.co.kr/images/public/2022/04/13/15/10/25/6a3ff293-7f31-4483-b3c6-17b7d78e59e3.jpg' }
+            },
+            'ENTJ': { 
+                '정치': { name: '마거릿 대처', img: 'https://i.namu.wiki/i/bvL-13B9kvZOgxwaGHEGRAsgSA-od2saBqBvrvO52YhEsS6Pk6xufu5uuRcuYVoC9VlZr5RvY5PE-hkLKRzYtQ.webp' },
+                '경제': { name: '앨런 그린스펀', img: 'https://i.namu.wiki/i/GfK4jW9oS1cvZFKS8kg7xsa2F8LIdkq389usptULusfWrJdr_KL0Hi06oA6BXL0USG-fg_iVTDqebNL8IKFyTQ.webp' },
+                '경영': { name: '잭 웰치', img: 'https://i.namu.wiki/i/E_89jO-Gm8ZxcbShm95yQzKxPssCrLUnyu73V77HkmHkGb0I7KIREIyg3JIFRdG3QMor3cTqtETtd8gLkYIMwQ.webp' },
+                'IT': { name: '앤드리슨 호로위츠', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFzZHB8tVDHQ3bsqbaYNYTh880IhjaCsrNg4f9o7VdJiGmmia9MH8-BnKbb3alyU1TTCc&usqp=CAU' },
+                '사회': { name: '잭 웰치', img: 'https://i.namu.wiki/i/E_89jO-Gm8ZxcbShm95yQzKxPssCrLUnyu73V77HkmHkGb0I7KIREIyg3JIFRdG3QMor3cTqtETtd8gLkYIMwQ.webp' },
+                '철학': { name: '아리스토텔레스', img: 'https://weekly.chosun.com/news/photo/201703/11226_1.jpg' },
+                '심리': { name: '데이비드 매클렐런드', img: 'https://www.easternpsychological.org/images/McClelland2.jpg' },
+                '역사': { name: '폴 케네디', img: 'https://static.ebs.co.kr/images/public/2022/04/13/14/55/31/5d8f3424-e4ce-46b9-b7ff-ff1a6e9940b8.jpg' },
+                '과학': { name: '칼 세이건', img: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Carl_Sagan_Planetary_Society.JPG' },
+                '환경': { name: '앨 고어', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Al_Gore%2C_Vice_President_of_the_United_States%2C_official_portrait_1994.jpg/300px-Al_Gore%2C_Vice_President_of_the_United_States%2C_official_portrait_1994.jpg' },
+                '예술': { name: '제임스 카메론', img: 'https://static.ebs.co.kr/images/public/2022/11/8/10/50/57/49812c4f-8c76-49c9-b707-9864f1c744f6.png' }
+            },
+            'ENTP': { 
+                '정치': { name: '버니 샌더스', img: 'https://i.namu.wiki/i/ZPg5iF06qYPv7haBMhRZrDkZc5-Zg5gA7NPrm39RxbleNmkZvpnVizl5k7AyUOzS2E_2nvjwE1SJvPvEAiCcAg.webp' },
+                '경제': { name: '제프 베조스', img: 'https://i.namu.wiki/i/OTd7Gg1rF9yhk54xjxqVhS3IInWmztUWjLZ1mpCaYHZYKQLlV_EjsRAnja2fr0Q6ZbyY9vHc2Z9iFQJI6AwTjA.webp' },
+                '경영': { name: '제프 베조스', img: 'https://i.namu.wiki/i/OTd7Gg1rF9yhk54xjxqVhS3IInWmztUWjLZ1mpCaYHZYKQLlV_EjsRAnja2fr0Q6ZbyY9vHc2Z9iFQJI6AwTjA.webp' },
+                'IT': { name: '제프 베조스', img: 'https://i.namu.wiki/i/OTd7Gg1rF9yhk54xjxqVhS3IInWmztUWjLZ1mpCaYHZYKQLlV_EjsRAnja2fr0Q6ZbyY9vHc2Z9iFQJI6AwTjA.webp' },
+                '사회': { name: '조지 소로스', img: 'https://i.namu.wiki/i/sUkGIQcoePQYPWhF4_P88CzGiy-CXxB2CCrNpfC9ekUllRbfucieugDgEr9Rin9mrdWV5TBo9yMYTbqjcUnvXQ.webp' },
+                '철학': { name: '미셸 푸코', img: 'https://i.namu.wiki/i/mpTFgLl9ugxKWRhxioKuhIXYdfnfUB3Ez5AL_nvxWW6M8JrEnf_foMvD-Ld8kwkIrClxTn8uZzz3Fz3JqwTbCA.webp' },
+                '심리': { name: '스티븐 핑커', img: 'https://static.ebs.co.kr/images/public/2022/04/13/14/52/38/d72c0785-574e-4226-b9b2-7f073289e65e.jpg' },
+                '역사': { name: '알레산드로 바르베로', img: 'https://premiostrega.it/PS/wp-content/uploads/2022/09/Alessandro-Barbero.jpg' },
+                '과학': { name: '조지프 르두', img: 'https://static.ebs.co.kr/images/public/2022/04/13/14/53/4/7076e799-d2fa-4164-8691-bea52c2e80d4.jpg' },
+                '환경': { name: '스튜어트 브랜드', img: ' https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZbq-xpaaJefOMuN_5nEBfnVjckRc4Mpu8aFUE2Lcfk2ZITyUjDSivP7JPdHLW4JRJUuk&usqp=CAU' },
+                '예술': { name: '위화', img: 'https://static.ebs.co.kr/images/public/2023/03/22/15/58/21/d314235a-ccf0-4d6c-86b8-909fc2ba192c.png' }
+            },
+            'INFJ': { 
+                '정치': { name: '넬슨 만델라', img: 'https://i.namu.wiki/i/kKxjW0UaNFO3lvV0FooGidz8zo3MuScpm3bpYX3lneFpzWU8eWUPfoUO6u9lC7PqMf6R2wOygMXJedPhpdXRrQ.webp' },
+                '경제': { name: '마하트마 간디', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mahatma-Gandhi%2C_studio%2C_1931.jpg/200px-Mahatma-Gandhi%2C_studio%2C_1931.jpg' },
+                '경영': { name: '하워드 슐츠', img: 'https://i.namu.wiki/i/OZWYFSU7Dq9ghP0p9eZ5e-eyuFUBlCZLJ5xoYt-x4p95wl2bVNy59gRUuiCtReULNTMF2hPMgJcJdu518f0F9w.webp' },
+                'IT': { name: '팀 쿡', img: 'https://cdn.it.chosun.com/news/photo/201804/2018042085061_1.jpg' },
+                '사회': { name: '넬슨 만델라', img: 'https://i.namu.wiki/i/kKxjW0UaNFO3lvV0FooGidz8zo3MuScpm3bpYX3lneFpzWU8eWUPfoUO6u9lC7PqMf6R2wOygMXJedPhpdXRrQ.webp' },
+                '철학': { name: '카를 융', img: 'https://i.namu.wiki/i/u4kH-S8w3X_rQ1LM_a15vmgjbwwx6yQdDOXNuGRl9OAWveeHlkANuIoMn8Ybt9yik3ZNFHdYkOD8LAewR4cndA.webp' },
+                '심리': { name: '하워드 가드너', img: 'https://static.ebs.co.kr/images/public/2023/08/24/13/46/45/dcc38134-e328-4859-8a95-ca69ef1af74c.png' },
+                '역사': { name: '알렉시스 더든 ', img: 'https://static.ebs.co.kr/images/public/2023/01/18/16/45/6/15b5b63d-38b8-44cc-bd90-3ed8a58b08e2.png' },
+                '과학': { name: '베셀 반 데어 콜크', img: 'https://static.ebs.co.kr/images/public/2023/04/13/11/28/30/8fc52479-be26-41b1-824e-f7fa33b15171.png' },
+                '환경': { name: '제인 구달', img: 'https://static.ebs.co.kr/images/public/2022/08/23/10/5/11/29ce8584-dd49-46f4-80da-ccaecf916598.png' },
+                '예술': { name: '곤도 마리에', img: 'https://www.muji.com/img/compactlife/column003.jpg' }
+            },
+            'INFP': { 
+                '정치': { name: '조지 오웰', img: 'https://i.namu.wiki/i/TIChQm9G228STGcEd6pC9LrcX-k3aju3iXlMim_jJYA27-2toSQK7wfT62CBFxBxT3j-xJXjapR5cy5gnNB0dg.webp' },
+                '경제': { name: '조지 소로스', img: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fnamu.wiki%2Fw%2F%25EC%25A1%25B0%25EC%25A7%2580%2520%25EC%2586%258C%25EB%25A1%259C%25EC%258A%25A4&psig=AOvVaw3_sRC3z7yCIYwwEUvycF6O&ust=1724267872376000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwj_58HBpISIAxWGn68BHX6_OWYQjRx6BAgAEBg' },
+                '경영': { name: '잭 도르시', img: 'https://i.namu.wiki/i/vu7G6JPDaLx-iiLz-1bC9Wko55TQ3vwB9cfBN-pYOd-FyTv_LUlhYi3OY-0VxUmdPNA-YIA587vkYY4xp0OKFg.webp' },
+                'IT': { name: '에드워드 스노든', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcctRQruNVijg8wehw3h08S7medSXwTV5vktosMyFwACZEJkFMScSLOa6JoEnl3Zd2QEA&usqp=CAU' },
+                '사회': { name: '조지 루카스', img: 'https://i.namu.wiki/i/PNi434AyhibFl5kMDUU4EzjecT6gv12sol3tj7ILeGeNWIOy20MezpVvjymRiCVVyI56T-moHOtMxO5VzcDftw.webp' },
+                '철학': { name: '마르틴 부버', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Martin_Buber_portrait.jpg/220px-Martin_Buber_portrait.jpg' },
+                '심리': { name: '칼 로저스', img: 'https://www.seoultopnews.kr/news/photo/202104/37677_31099_3137.jpg' },
+                '역사': { name: '로버트 카플란', img: 'https://monthly.chosun.com/upload/2111/2111_204.jpg' },
+                '과학': { name: '자크 라캉', img: 'https://t1.daumcdn.net/cfile/tistory/998D87405BA8C11D08' },
+                '환경': { name: '존 로버트 맥닐', img: 'https://static.ebs.co.kr/images/public/2023/12/8/9/14/27/6fbb798c-7132-4b99-a083-6fcc4406bcf7.png' },
+                '예술': { name: '윌리엄 셰익스피어', img: 'https://img.seoul.co.kr//img/upload/2011/11/13/SSI_20111113115153.jpg' }
+            },
+            'ENFJ': { 
+                '정치': { name: '자크 시라크', img: 'https://i.namu.wiki/i/U4fPGWtyiN3qiLe9v_yMY-ut4eVdFAd1Is1_Ld25dTvLasiZH8iuUPEgdNh3Z4EmTux7aT5qu1J3_EujPELcuA.webp' },
+                '경제': { name: '바락 오바마', img: 'https://i.namu.wiki/i/T3o5QO1NFq4o0HpFHv-ZJmMqukR6GtQPrqSnaa95V_wwatgaCpNPnvwr5QppK8AzmYamCJwXhHnzV1AYdYW_AQ.webp' },
+                '경영': { name: '마사 스튜어트', img: 'https://i.namu.wiki/i/qEr7xmdwUExN_Fameml4nw6UI2c4LQm_RxLyM5itwlps3889uEQmdy_PFDg7lSNLv-R4UPyuLu10HBMCm7iQZA.webp' },
+                'IT': { name: '마크 베니오프', img: 'https://i.namu.wiki/i/8IpRwej9Mc1C9xgZPvASlcHYfTkV_wnuZUQs1FXKhFRwExtJW7KUK_olC0713hLE1aEnZ2FIamrAviJhvxVRAA.webp' },
+                '사회': { name: '바락 오바마', img: 'https://i.namu.wiki/i/T3o5QO1NFq4o0HpFHv-ZJmMqukR6GtQPrqSnaa95V_wwatgaCpNPnvwr5QppK8AzmYamCJwXhHnzV1AYdYW_AQ.webp' },
+                '철학': { name: '마하트마 간디', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mahatma-Gandhi%2C_studio%2C_1931.jpg/200px-Mahatma-Gandhi%2C_studio%2C_1931.jpg' },
+                '심리': { name: '에이브러햄 매슬로', img: 'https://cdn.ggbn.co.kr/news/photo/202205/50793_71803_2340.jpg' },
+                '역사': { name: '하워드 진', img: 'https://i.namu.wiki/i/2x7RcT-6NN-l1BDxKJ0NSDy8fzJth6gSRKuhZUwb12o6sVTXw111c3RSFOACG7x7DQjjhRKF-Tf3OcZ05p6CHw.webp' },
+                '과학': { name: '닐 디그래스 타이슨', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Tyson_-_Apollo_40th_anniversary_2009.jpg/640px-Tyson_-_Apollo_40th_anniversary_2009.jpg' },
+                '환경': { name: '헬레나 호지 ', img: 'https://static.ebs.co.kr/images/public/2022/12/28/14/25/44/32624f3f-3906-47c8-a810-c313eed80fa5.png' },
+                '예술': { name: '스티브 맥커리', img: 'https://static.ebs.co.kr/images/public/2022/08/31/15/3/29/25e0912e-7a2e-4d37-b274-b6f16bf7092e.png' }
+            },
+            'ENFP': { 
+                '정치': { name: '조 바이든', img: 'https://i.namu.wiki/i/k9_pwA4z1oTJepGbIqNzCWg_nM_h93yaVo2DNBIrEypjjtJUezH6g1PnPIN8zZKkqcY0aI27nc2AWqpUenQ4eQ.webp' },
+                '경제': { name: '엘리자베스 워런', img: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fko.wikipedia.org%2Fwiki%2F%25EC%2597%2598%25EB%25A6%25AC%25EC%259E%2590%25EB%25B2%25A0%25EC%258A%25A4_%25EC%259B%258C%25EB%259F%25B0&psig=AOvVaw3c0GIfZPSjkyBy7ONDZvj3&ust=1724268100355000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwj2w5yupYSIAxXAe_UHHah8MfwQjRx6BAgAEBg' },
+                '경영': { name: '리드 호프먼', img: 'https://i.namu.wiki/i/qrFLso8s2uwEq4wUX2Jq8jIDOmLJfwYvcsrRVd7Wu9raaLzTEGNfCjCc_3jKgCggeIwT0aPELysdSQCDp1POJQ.webp' },
+                'IT': { name: '잭 도르시', img: 'https://i.namu.wiki/i/vu7G6JPDaLx-iiLz-1bC9Wko55TQ3vwB9cfBN-pYOd-FyTv_LUlhYi3OY-0VxUmdPNA-YIA587vkYY4xp0OKFg.webp' },
+                '사회': { name: '엘리자베스 워런', img: 'https://i.namu.wiki/i/GRkf_JVUn4UZD28g0kYieLKoNothpjHQMRUOVh0BmF2x6lJ_KIGEaZmp4_FORhjkxzfMPMDTxApgnT7jfiCbOQ.webp' },
+                '철학': { name: '헨리 데이비드 소로', img: 'https://i.namu.wiki/i/PqMuhMTZZARA-lrq0XIQbtKa8fkeTPN9DLwxboNSk9H9P5lede_eD5bzjb5C-oFh-QMlRXonQUz0sdnj4uHbzA.webp' },
+                '심리': { name: '자크 데리다', img: 'https://img.khan.co.kr/news/2012/05/11/2012051201001159700111981.jpg' },
+                '역사': { name: '에드워드 사이드', img: 'https://i.namu.wiki/i/dALRePOa0PGgrq0f1OmLSSnUqX6yHkV-TEZT3ODZsMB5t50pcghLD-jrWYPTRmlQOYQtk8GTu_MA7QDyCQGCsA.webp' },
+                '과학': { name: '미치오 카쿠', img: 'https://contents.kyobobook.co.kr/sih/fit-in/280x0/dtl/author/2000678501.jpg' },
+                '환경': { name: '이안 레이먼드', img: 'https://static.ebs.co.kr/images/public/2022/04/26/17/27/47/92688f2c-0920-4975-8abc-c4cd34a62002.jpg' },
+                '예술': { name: '쿠엔틴 타란티노', img: 'https://cdn.ziksir.com/news/photo/201608/3547_10235.jpg' }
+            },
+            'ISTJ': { 
+                '정치': { name: '앙겔라 메르켈', img: 'https://i.namu.wiki/i/Fy4XyD5RbflZQfN2oczfO0wXXjPVOA2Tou3Cy-lesdB1RUx6LMNEMGwe58xmaZ-8uOgGJrABWQIeGBFDA4dXHg.webp' },
+                '경제': { name: '워렌 버핏', img: 'https://i.namu.wiki/i/kWsfvMXLrk01RVDmrLFQ5LvQw_TgZ5YfS4Lyys_CETiwo7TMGNXirRbNnhhGpBdlAgqWw4fYRS3ka5MJd9Bd4g.webp' },
+                '경영': { name: '앤드류 카네기', img: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Andrew_Carnegie%2C_three-quarter_length_portrait%2C_seated%2C_facing_slightly_left%2C_1913.jpg' },
+                'IT': { name: '빌 게이츠', img: 'https://i.namu.wiki/i/CKcS6pEqMtSo03THIuBP2lp07P700naszPC5XUk9qiTAKiDZEoKQgHC_k3ZRewbp68eC8GNfPlDK4IUowKgAQA.webp' },
+                '사회': { name: '앙겔라 메르켈', img: 'https://i.namu.wiki/i/Fy4XyD5RbflZQfN2oczfO0wXXjPVOA2Tou3Cy-lesdB1RUx6LMNEMGwe58xmaZ-8uOgGJrABWQIeGBFDA4dXHg.webp' },
+                '철학': { name: '토머스 홉스', img: 'https://i.namu.wiki/i/1TmK7Xtq0nmNrhBfvyMI00-UCzoUY4qw760Ek6a8sEmJU8N7zRf1mPnX2ONjdEvADXnQlrJCJI6NkvqGhFlHgQ.webp' },
+                '심리': { name: '지그문트 프로이트', img: 'https://cdn.hyunbulnews.com/news/photo/201412/282036_49562_68.jpg' },
+                '역사': { name: '크세노폰', img: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Xenophon.jpg' },
+                '과학': { name: '피터 포나기 ', img: 'https://static.ebs.co.kr/images/public/2023/04/6/15/46/27/b312be3a-4cfa-4e98-b9bf-eb027bb2f178.png' },
+                '환경': { name: '팀 풀', img: 'https://i.namu.wiki/i/uAJi2KlvRTj-XrvKEBuK3ScKraysBuG6USkiv0QzYD8wFoUSTx8ShHdW2LHWjMQgP1-aDNwh_wvtSnifj4v1JQ.webp' },
+                '예술': { name: '요한 제바스티안 바흐', img: 'https://kid.chosun.com/site/data/img_dir/2018/03/20/2018032001904_0.jpg' }
+            },
+            'ISFJ': { 
+                '정치': { name: '마가렛 대처', img: 'https://i.namu.wiki/i/bvL-13B9kvZOgxwaGHEGRAsgSA-od2saBqBvrvO52YhEsS6Pk6xufu5uuRcuYVoC9VlZr5RvY5PE-hkLKRzYtQ.webp' },
+                '경제': { name: '제인 구달', img: 'https://i.namu.wiki/i/9V76tlrOfmeb1MCG8XdTJVb6nPBH2aaeVq3QV_yD11z8PaPZmM3EG4r4XgyCNXjiuIabbxqXDV73ZWpZjiLdGA.webp' },
+                '경영': { name: '메리 케이 애쉬', img: 'https://cdn.womentimes.co.kr/news/photo/202203/55567_56772_5025.jpg' },
+                'IT': { name: '마리사 메이어', img: 'https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/s2016081107.jpg' },
+                '사회': { name: '마더 테레사', img: 'https://i.namu.wiki/i/coDWWsTWgac2j_FfPT9zYkhHPBADDhkEuZP0iEUA52k7mJevxYd0xVm-OrcbEpJjnLZDuQHip8wbTh40NBAXaQ.webp' },
+                '철학': { name: '소크라테스', img: 'https://cdn.epnews.net/news/photo/PEG/14485161346722.jpg' },
+                '심리': { name: '조지 켈리', img: 'https://www.istrazime.com/wp-content/uploads/2014/04/george-kelly.jpg' },
+                '역사': { name: '앨리스 폴', img: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Alice_Paul_cph.3a38295.jpg' },
+                '과학': { name: '프란스 드 발', img: 'https://mblogthumb-phinf.pstatic.net/MjAyMzEwMjJfMjU1/MDAxNjk3OTYxMjgxNzk3.CudvU9S7kiORTOM0pP2n5JKpVvAInlpa4HWt5bwkjMcg.LQfU3RVGZWM9LUUB2Oso28_JauZEUglN_OuiRrang2kg.PNG.yspattern/20231022_165428.png?type=w800' },
+                '환경': { name: '마더 테레사 ', img: 'https://res.heraldm.com/content/image/2016/03/17/20160317001350_1.jpg' },
+                '예술': { name: '리처드 마이어 ', img: 'https://blog.kakaocdn.net/dn/98tSI/btqRGpgYP2M/Ry0KYO97KhTXntqfAFgDI0/img.jpg' }
+            },
+            'ESTJ': { 
+                '정치': { name: '윈스턴 처칠', img: 'https://blog.kakaocdn.net/dn/df0yFJ/btqDQ8try6z/ZcZyDBNyfeBEz9eVM3Ba90/img.png' },
+                '경제': { name: '재닛 옐런', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5AezrjARok-ngIDHcTkA-wai1wpfFHrSm0k_MZavbV7NnvjwdvdJeEsm9rCYDOas2EE0&usqp=CAU' },
+                '경영': { name: '인드라 누이', img: 'https://file.mk.co.kr/meet/neds/2018/10/image_readtop_2018_625076_15389460623482926.jpg' },
+                'IT': { name: '인드라 누이', img: 'https://file.mk.co.kr/meet/neds/2018/10/image_readtop_2018_625076_15389460623482926.jpg' },
+                '사회': { name: '인드라 누이', img: 'https://file.mk.co.kr/meet/neds/2018/10/image_readtop_2018_625076_15389460623482926.jpg' },
+                '철학': { name: '존 스튜어트 밀', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/John_Stuart_Mill_by_London_Stereoscopic_Company%2C_c1870.jpg/800px-John_Stuart_Mill_by_London_Stereoscopic_Company%2C_c1870.jpg' },
+                '심리': { name: '앤드류 후버만', img: 'https://i.namu.wiki/i/Lr4vKw9pwb6PahjjGXVaH8yggtPZq_651xAl--V1QrgbxRt7RRKfI6dWjV0LCz7By5ZJP21DOJxrAOJa8ITmag.webp' },
+                '역사': { name: '로렌스 스턴', img: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Laurence_Sterne_by_Sir_Joshua_Reynolds.jpg' },
+                '과학': { name: '앤드류 후버만', img: 'https://i.namu.wiki/i/Lr4vKw9pwb6PahjjGXVaH8yggtPZq_651xAl--V1QrgbxRt7RRKfI6dWjV0LCz7By5ZJP21DOJxrAOJa8ITmag.webp' },
+                '환경': { name: '아놀드 슈왈제네거', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Arnold_Schwarzenegger_by_Gage_Skidmore_4.jpg/251px-Arnold_Schwarzenegger_by_Gage_Skidmore_4.jpg' },
+                '예술': { name: '톰 클랜시', img: 'https://i.namu.wiki/i/UIUwtBt9-8PymUwQ1uU9qj8lH3fUtnyurv24cLbs_54dn-GlvBV3CSw0iQIgAP3zcftrS93PCRb2ZpHt4oFxKw.webp' }
+            },
+            'ESFJ': { 
+                '정치': { name: '힐러리 클린턴', img: 'https://i.namu.wiki/i/elFazqEw_BSj5N_oowJIbv9wdaZUYMU-BoqPPfc4JhAnkYFS-qqoAOfsColDuvrH6Sjs0ZSwMzzXGT778RDyqQ.webp' },
+                '경제': { name: '메리안 윌리엄슨', img: 'https://i.namu.wiki/i/SrEJPwiLxBWehpd0AJGUvSWZW4NosIXVg5-O9_MMBfwJWKSMS_OouOXLvE3MCGQB1ITZj_0RD0cu65kh8ym-iA.webp' },
+                '경영': { name: '셰릴 샌드버그', img: 'https://i.namu.wiki/i/BjV0rbDJu0zKi7UlBt8hxJ02T87EFHCoJOR5c0nzcn01w4Nnclyy5mPIc8HHWssOrCgX2a_94sU7u0aUd57bXQ.webp' },
+                'IT': { name: '셰릴 샌드버그', img: 'https://i.namu.wiki/i/BjV0rbDJu0zKi7UlBt8hxJ02T87EFHCoJOR5c0nzcn01w4Nnclyy5mPIc8HHWssOrCgX2a_94sU7u0aUd57bXQ.webp' },
+                '사회': { name: '메리앤 윌리엄슨', img: 'https://i.namu.wiki/i/SrEJPwiLxBWehpd0AJGUvSWZW4NosIXVg5-O9_MMBfwJWKSMS_OouOXLvE3MCGQB1ITZj_0RD0cu65kh8ym-iA.webp' },
+                '철학': { name: '시몬 드 보부아르', img: 'https://flexible.img.hani.co.kr/flexible/normal/590/423/imgdb/resize/2014/1031/00516760901_20141031.JPG' },
+                '심리': { name: '다니엘 골먼', img: 'https://lh3.googleusercontent.com/proxy/p0EB1tJMyvAF9zdFwTgeSWD4cBistvirn2ax3w4mG_YJ7kQrlnelFNp3x-rYku0o7lwwodGiQr3LGPJaPkOjdgYyKdEYVFaT74TFYn-fnrslWZQgl1x77P22klIVxYcwL1c' },
+                '역사': { name: '윌 듀란트', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZa98cRU-Km6pRWg56mdD85R0RfHcTYRjes54Nu44B-HeVTXrlER5YuHC86b6HAzkPVg&usqp=CAU' },
+                '과학': { name: '다니엘 골먼', img: 'https://lh3.googleusercontent.com/proxy/p0EB1tJMyvAF9zdFwTgeSWD4cBistvirn2ax3w4mG_YJ7kQrlnelFNp3x-rYku0o7lwwodGiQr3LGPJaPkOjdgYyKdEYVFaT74TFYn-fnrslWZQgl1x77P22klIVxYcwL1c' },
+                '환경': { name: '잉그리드 뉴커크', img: 'https://www.santacruzsentinel.com/wp-content/uploads/migration/2011/201109/NEWS_110927682_AR_0_OXULYSOWVLVV.jpg?w=535' },
+                '예술': { name: '제니퍼 가너', img: 'https://i.namu.wiki/i/rvNIEHrjBAvfkbyCkmVy_DFJuZBBevOlGka6-AIID5W4vQod2hO_cN7LQo_yFnFx1H0blEVdIsJwE_sSh5PDqA.webp' }
+            },
+            'ISTP': { 
+                '정치': { name: '시어도어 루스벨트', img: 'https://i.namu.wiki/i/q8Ls9UoQiAyianbWJAvmf03vyAXUO17PFrSp03IGPMr8Lk-ZBKP3QzMSThHqhc0i3hZFwrcI13YLQE-nqGLL1g.webp' },
+                '경제': { name: '리처드 브랜슨', img: 'https://i.namu.wiki/i/3s57anRCv2N_UJhKCQl1OR7Ci1d8LTbI8iL6jOUY52QaR6--QlaMN4aXTxSI8J5H7zlFiaCVqaAqg8Fs7F1lEg.webp' },
+                '경영': { name: '리처드 브랜슨', img: 'https://i.namu.wiki/i/3s57anRCv2N_UJhKCQl1OR7Ci1d8LTbI8iL6jOUY52QaR6--QlaMN4aXTxSI8J5H7zlFiaCVqaAqg8Fs7F1lEg.webp' },
+                'IT': { name: '리처드 브랜슨', img: 'https://i.namu.wiki/i/3s57anRCv2N_UJhKCQl1OR7Ci1d8LTbI8iL6jOUY52QaR6--QlaMN4aXTxSI8J5H7zlFiaCVqaAqg8Fs7F1lEg.webp' },
+                '사회': { name: '리처드 브랜슨', img: 'https://i.namu.wiki/i/3s57anRCv2N_UJhKCQl1OR7Ci1d8LTbI8iL6jOUY52QaR6--QlaMN4aXTxSI8J5H7zlFiaCVqaAqg8Fs7F1lEg.webp' },
+                '철학': { name: '데이비드 흄', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiu9FosSwbSlNiO6evC4Wt_sqiSpJgcodDyrVrDKjudWcZLfv1iMAZBsbL8eBGhG0SdZQ&usqp=CAU' },
+                '심리': { name: '카를 융', img: 'https://img.seoul.co.kr//img/upload/2011/04/24/SSI_20110424181752.jpg' },
+                '역사': { name: '폴 존슨', img: 'https://contents.kyobobook.co.kr/sih/fit-in/280x0/dtl/author/2000757501.jpg' },
+                '과학': { name: '우구르 사힌', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiNK-qC-IMXRThOx-LPw--aVxgU7gwm89RXw&s' },
+                '환경': { name: '데이비드 애튼버러', img: 'https://cdn.newspoole.kr/news/photo/202012/6205_8835_338.jpg' },
+                '예술': { name: '스베틀라나 알렉시예비치 ', img: 'https://static.ebs.co.kr/images/public/2024/04/17/14/38/2/2971fafc-df50-4035-9682-88968e0b925e.png' }
+            },
+            'ISFP': { 
+                '정치': { name: '바락 오바마', img: 'https://i.namu.wiki/i/T3o5QO1NFq4o0HpFHv-ZJmMqukR6GtQPrqSnaa95V_wwatgaCpNPnvwr5QppK8AzmYamCJwXhHnzV1AYdYW_AQ.webp' },
+                '경제': { name: '엘리너 루즈벨트', img: 'https://i.namu.wiki/i/cRLjTlWRRjRdIVWxj9amswWLIYsl6GDF6GBuIJG7wiXm8pjQQGcPXyO3H8RkdQTXjMxsL7GXQxu76TRG4Rtp7A.webp' },
+                '경영': { name: '스티브 잡스', img: 'https://i.namu.wiki/i/hazA3AZfUGG7Y5ozRS_NDJGrWMV3Qv-JNbor5ZsTMDV2SzLoLM_-BsYjqFjcG321iA2Y-KOlCXmtSJfAUH8few.webp' },
+                'IT': { name: '스티브 잡스', img: 'https://i.namu.wiki/i/hazA3AZfUGG7Y5ozRS_NDJGrWMV3Qv-JNbor5ZsTMDV2SzLoLM_-BsYjqFjcG321iA2Y-KOlCXmtSJfAUH8few.webp' },
+                '사회': { name: '비욘세', img: 'https://i.namu.wiki/i/_Nld9494jVVmYat1nVhhd6jPO2lEuaMBYw-6IxjQf5bVA6c_9R6D2mAo_kI9aiAoPWnuDeIfiBhcTPBIJSneFA.webp' },
+                '철학': { name: '장 폴 사르트르', img: 'https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/2j9V/image/z8twERVgBzW7R5PzrRykGvPtsdE.jpg' },
+                '심리': { name: '다니엘 카너먼', img: 'https://pimg.mk.co.kr/meet/neds/2021/05/image_readtop_2021_434472_16202413234634863.jpg' },
+                '역사': { name: '자코모 카사노바', img: 'https://mblogthumb-phinf.pstatic.net/20140908_145/lucky1n_14101861710515iIMn_PNG/%C4%AB%BB%E7%B3%EB%B9%D9%282%29.png?type=w420' },
+                '과학': { name: '올리버 색스', img: 'https://economychosun.com/site/data/img_dir/2023/09/26/2023092600008_0.jpg' },
+                '환경': { name: '레이첼 카슨', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Rachel-Carson.jpg/233px-Rachel-Carson.jpg' },
+                '예술': { name: '프리다 칼로', img: 'https://pimg.mk.co.kr/meet/neds/2019/01/image_readtop_2019_4277_15464628633590223.jpeg' }
+            },
+            'ESTP': { 
+                '정치': { name: '도널드 트럼프', img: 'https://i.namu.wiki/i/lcV9XB7SKPBcm9ymD9ybubbu9s88pt3VkeQF6XGlqTdhAyDCzS6ZJ3dg50tWT7vLF0_TNzVXiy1c_zfUNWfPFQ.webp' },
+                '경제': { name: '도널드 트럼프', img: 'https://i.namu.wiki/i/lcV9XB7SKPBcm9ymD9ybubbu9s88pt3VkeQF6XGlqTdhAyDCzS6ZJ3dg50tWT7vLF0_TNzVXiy1c_zfUNWfPFQ.webp' },
+                '경영': { name: '도널드 트럼프', img: 'https://i.namu.wiki/i/lcV9XB7SKPBcm9ymD9ybubbu9s88pt3VkeQF6XGlqTdhAyDCzS6ZJ3dg50tWT7vLF0_TNzVXiy1c_zfUNWfPFQ.webp' },
+                'IT': { name: '마크 저커버그', img: 'https://i.namu.wiki/i/im_3cPAJCYYHO0ZadoF6-Ncfnfj-M8O76vBnWBzrr93VoUKBeUBsJEKJdbSRp0N0SINtIOnWHz_cm_lsmDW9Bw.webp' },
+                '사회': { name: '도널드 트럼프', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/300px-Donald_Trump_official_portrait.jpg' },
+                '철학': { name: '아인 랜드', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgk8lCAaGO4YBuMFnXWpy9pcz9va3XPdAf-drBAqnq-Me26G2krNKHaWx9b9_CIB2tW78&usqp=CAU' },
+                '심리': { name: '데일 카네기', img: 'https://i.namu.wiki/i/qE5bo_WQhb7QUfDitE6JabDMIGUyThy5BNYbLWFClYPJmOzwjBeobh1G3qYshcm7mFYKosHE9aOtg2_24z8WgA.webp' },
+                '역사': { name: '리처드 오버리', img: 'https://images2.penguinrandomhouse.com/author/22967' },
+                '과학': { name: '존 폰 노이만', img: 'https://i.namu.wiki/i/aKUfplZP_pDXZt9S9AQRuHSc-zN-vKjmQhka9wlbkK9cJxOfZoitM0yiRfxyF1p3M3_WrdgLLvVLGmLhM8u_Lw.webp' },
+                '환경': { name: '어니스트 헤밍웨이', img: 'https://i.namu.wiki/i/NzfRUYrYA2kUjFJOH4nwthfeb0P_SxRcu0qXqOFJSzKQVzQPDsirRAqcpIVSxmv_bQeCSecBFnX7DJjpJKvwwA.webp' },
+                '예술': { name: '어니스트 헤밍웨이', img: 'https://img.seoul.co.kr/img/upload/2017/10/01/SSI_20171001225653_O2.jpg' }
+            },
+            'ESFP': { 
+                '정치': { name: '로널드 레이건', img: 'https://i.namu.wiki/i/OtgBzd2B-yZfybWydQQ-SuwP78w8S3mQ2zr4wIh7WNXJ1Tx7fVE8NL4ziyuUHBYTpeRElFPBoXV4LUfphnjkRQ.webp' },
+                '경제': { name: '리사 미농', img: 'https://images.app.goo.gl/RTL2wbT8AwPX8gYh7' },  
+                '경영': { name: '오프라 윈프리', img: 'https://i.namu.wiki/i/1bre25nvMGE60zQZqbq-SYfYktjSMZtp0SLwa89AwnI2Om_c1-l10XzCM6_dDRM5veox8rP8bSPkT7SwgJFqAA.webp' },
+                'IT': { name: '오프라 윈프리', img: 'https://i.namu.wiki/i/1bre25nvMGE60zQZqbq-SYfYktjSMZtp0SLwa89AwnI2Om_c1-l10XzCM6_dDRM5veox8rP8bSPkT7SwgJFqAA.webp' },
+                '사회': { name: '오프라 윈프리', img: 'https://i.namu.wiki/i/1bre25nvMGE60zQZqbq-SYfYktjSMZtp0SLwa89AwnI2Om_c1-l10XzCM6_dDRM5veox8rP8bSPkT7SwgJFqAA.webp' },
+                '철학': { name: '알랭 드 보통', img: 'https://cdn.sisunnews.co.kr/news/photo/201602/33235_46381_52.jpg' },
+                '심리': { name: '웨인 다이어', img: 'https://mycherrystone.files.wordpress.com/2021/12/wayne-dyer_0.jpg' },
+                '역사': { name: '페르낭 브로델', img: 'https://img.khan.co.kr/news/2016/06/07/l_2016060801000883500069622.jpg' },
+                '과학': { name: '리처드 파인만', img: 'https://i.namu.wiki/i/C9peeGUAUj1qN0Wea9houEFqD0o7jin-II9xgq9NpM8diAeNN-muEGdcaf_XWnZOewPq-C7MZqzYyzjZTOys_w.webp' },
+                '환경': { name: '스티브 어윈', img: 'https://i.namu.wiki/i/BaCZNQo_is1tlx3pIfWLXeHlpmXzgHMyK9GYg_7512TLdmUOfMblq0bRCYikOm0v96wWu7eL86eAHf7iZw59Fw.webp' },
+                '예술': { name: '제이미 올리버', img: 'https://img.vogue.co.kr/vogue/2019/05/style_5ce63946cb671.jpg' }
+            }
+        };
+        
+        const resultPerson = famousPeople[mbti][interest];
+
+        document.getElementById('result-container').innerHTML = `
+            <h2>${name}님, 당신은 <strong>${resultPerson.name}</strong>님과 비슷한 성향이네요!</h2>
+            <img src="${resultPerson.img}" alt="${resultPerson.name}">
+            <p id="result-link"></p>
+        `;
+
+        let link = '';
+        switch (interest) {
+            case '정치':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007451&clsfnId=60007451';
+                break;
+            case '경제':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007452&clsfnId=60007452';
+                break;
+            case '경영':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007453&clsfnId=60007453';
+                break;
+            case 'IT':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007860&clsfnId=60007860';
+                break;
+            case '사회':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007454&clsfnId=60007454';
+                break;
+            case '철학':
+                link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007455&clsfnId=60007455';
+                break;
+            case '심리':
+                switch (mbti) {
+                    case 'ENFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60403515';
+                        break;
+                    case 'ENTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60174780';
+                        break;
+                    case 'ENFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60345492';
+                        break;
+                    case 'ENTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60345819';
+                        break;
+                    case 'INFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60403895';
+                        break;
+                    case 'INTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60114841';
+                        break;
+                    case 'INFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60390073';
+                        break;
+                    case 'INTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60390363';
+                        break;
+                    case 'ESFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60114841';
+                        break;
+                    case 'ESTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60346385';
+                        break;
+                    case 'ESFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60345819';
+                        break;
+                    case 'ESTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60404266';
+                        break;
+                    case 'ISFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60390074';
+                        break;
+                    case 'ISTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60115385';
+                        break;
+                    case 'ISFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60405799';
+                        break;
+                    case 'ISTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60114843';
+                        break;
+                    default:
+                        link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007457&clsfnId=60007457';
+                        break;
+                    }
+                    break;
+            case '역사':
+                switch (mbti) {
+                    case 'ENFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60297991';
+                        break;
+                    case 'ENTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188359';
+                        break;
+                    case 'ENFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60275141';
+                        break;
+                    case 'ENTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188355';
+                        break;
+                    case 'INFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188359';
+                        break;
+                    case 'INTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60218993';
+                        break;
+                    case 'INFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60309540';
+                        break;
+                    case 'INTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60213058';
+                        break;
+                    case 'ESFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60220485';
+                        break;
+                    case 'ESTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60265711';
+                        break;
+                    case 'ESFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60441902';
+                        break;
+                    case 'ESTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60263925';
+                        break;
+                    case 'ISFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60296389';
+                        break;
+                    case 'ISTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60366947';
+                        break;
+                    case 'ISFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60459796';
+                        break;
+                    case 'ISTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60218993';
+                        break;
+                    default:
+                        link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007458&clsfnId=60007458';
+                        break;
+                    }
+                    break; 
+            case '과학':
+                switch (mbti) {
+                    case 'ENFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60179792';
+                        break;
+                    case 'ENTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60182579';
+                        break;
+                    case 'ENFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188362';
+                        break;
+                    case 'ENTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60177163';
+                        break;
+                    case 'INFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60337097';
+                        break;
+                    case 'INTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60102107';
+                        break;
+                    case 'INFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60342784';
+                        break;
+                    case 'INTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60417989';
+                        break;
+                    case 'ESFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60417096';
+                        break;
+                    case 'ESTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60193781';
+                        break;
+                    case 'ESFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60201947';
+                        break;
+                    case 'ESTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188350';
+                        break;
+                    case 'ISFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60182583';
+                        break;
+                    case 'ISTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60473986';
+                        break;
+                    case 'ISFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60188354';
+                        break;
+                    case 'ISTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60339200';
+                        break;
+                    default:
+                        link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007459&clsfnId=60007459';
+                        break;
+                    }
+                    break;
+            case '환경':
+                switch (mbti) {
+                    case 'ENFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60216186';
+                        break;
+                    case 'ENTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60430485';
+                        break;
+                    case 'ENFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60280371';
+                        break;
+                    case 'ENTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60430010';
+                        break;
+                    case 'INFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60427113';
+                        break;
+                    case 'INTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60282591';
+                        break;
+                    case 'INFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60247615';
+                        break;
+                    case 'INTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60316767';
+                        break;
+                    case 'ESFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60216832';
+                        break;
+                    case 'ESTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60429444';
+                        break;
+                    case 'ESFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60217391';
+                        break;
+                    case 'ESTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60283220';
+                        break;
+                    case 'ISFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60284898';
+                        break;
+                    case 'ISTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60226259';
+                        break;
+                    case 'ISFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60317578';
+                        break;
+                    case 'ISTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60430485';
+                        break;
+                    default:
+                        link = 'https://home.ebs.co.kr/greatminds/replay/6/list?courseId=40023168&stepId=60023845&searchCondition=shwLectNmSrch&searchKeyword=&catgryCd1=60007861&clsfnId=60007861';
+                        break;
+                    }
+                    break;
+            case '예술':
+                switch (mbti) {
+                    case 'ENFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60440660 ';
+                        break;
+                    case 'ENTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60330945';
+                        break;
+                    case 'ENFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60252360';
+                        break;
+                    case 'ENTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60291658';
+                        break;
+                    case 'INFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60292227';
+                        break;
+                    case 'INTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60189483';
+                        break;
+                    case 'INFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60206611';
+                        break;
+                    case 'INTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60293040';
+                        break;
+                    case 'ESFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60257582';
+                        break;
+                    case 'ESTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60468397';
+                        break;
+                    case 'ESFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60440659';
+                        break;
+                    case 'ESTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60469953 ';
+                        break;
+                    case 'ISFP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60443759';
+                        break;
+                    case 'ISTP':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60468397';
+                        break;
+                    case 'ISFJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60394537';
+                        break;
+                    case 'ISTJ':
+                        link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60196515';
+                        break;
+                    default:
+                        link = 'https://home.ebs.seId=40023168&stepId=60023845';
+                        break;
+                    }
+                    break;
+        default:
+            link = 'https://home.ebs.co.kr/greatminds/vodReplay/vodReplayView?courseId=40023168&stepId=60023845&lectId=60196515';
+            break;
+}
+
+        document.getElementById('result-link').innerHTML = `맞춤 강의 추천 링크: <a href="${link}" target="_blank">${link}</a>`;
+    </script>
+</body>
+</html>
